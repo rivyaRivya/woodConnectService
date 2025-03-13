@@ -46,7 +46,7 @@ public class productController {
             @RequestParam("image") MultipartFile image,
             @RequestParam("manufacture") String manufacture,
             @RequestParam("length") String length,
-            @RequestParam("width") String width,
+            @RequestParam("width") String width, 
             @RequestParam("labourPrice") String labourPrice,
             @RequestParam("manufacturePrice") String manufacturePrice) {
     // Convert image to byte array
