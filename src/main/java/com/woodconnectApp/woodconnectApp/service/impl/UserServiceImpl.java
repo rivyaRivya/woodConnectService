@@ -9,10 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.transport.transport.dto.BookingDTO;
-import com.transport.transport.dto.DriverDTO;
-import com.transport.transport.entity.Booking;
-import com.transport.transport.entity.TouristPlace;
 import com.woodconnectApp.woodconnectApp.dto.UserDTO;
 import com.woodconnectApp.woodconnectApp.dto.WoodTypeDTO;
 import com.woodconnectApp.woodconnectApp.entity.User;

@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.woodconnectApp.woodconnectApp.dto.ProductDTO;
+import com.woodconnectApp.woodconnectApp.dto.VariantDTO;
+import com.woodconnectApp.woodconnectApp.dto.VariantResponseDTO;
+import com.woodconnectApp.woodconnectApp.dto.VariantValueDTO;
 import com.woodconnectApp.woodconnectApp.dto.WoodTypeDTO;
 import com.woodconnectApp.woodconnectApp.entity.Product;
 import com.woodconnectApp.woodconnectApp.entity.WoodType;
@@ -105,6 +108,35 @@ public class productController {
 		     return ResponseEntity.noContent().build();
 	    }
 	    
-
-
+	 @PostMapping("/variant")
+	    public String createVariant(@RequestBody VariantDTO  variant) {
+	         productServices.createVariant(variant);
+	        return "variant added successfully";
+	    }
+	 
+	 @PostMapping("/variantValue")
+	    public String createVariantValue(@RequestBody VariantValueDTO  variant) {
+	         productServices.createVariantValue(variant);
+	        return "variant value added successfully";
+	    }
+	 
+	 @GetMapping("/get-variant")
+		public ResponseEntity<List<VariantResponseDTO>> getVariant(){
+			return ResponseEntity.ok(productServices.getVariant());
+		} 
+	 @GetMapping("/variant-details")
+	    public VariantResponseDTO getVariantDetails(@RequestParam Integer id) {
+	        return productServices.getVariantDetails(id);
+	    }
+	 
+	 @DeleteMapping("delete-variant/{id}")
+	    public ResponseEntity<Void> deleteVariant(@PathVariable Integer id){
+	    	productServices.deleteVaraint(id);
+	        return ResponseEntity.noContent().build();
+	    }
+	 @DeleteMapping("delete-variant-value/{id}")
+	    public ResponseEntity<Void> deleteVariantValue(@PathVariable Integer id){
+	    	productServices.deleteVaraintValue(id);
+	        return ResponseEntity.noContent().build();
+	    }
 }

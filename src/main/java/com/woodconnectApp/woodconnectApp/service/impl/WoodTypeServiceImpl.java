@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.transport.transport.entity.TouristPlace;
 import com.woodconnectApp.woodconnectApp.dto.WoodTypeDTO;
 import com.woodconnectApp.woodconnectApp.entity.User;
 import com.woodconnectApp.woodconnectApp.entity.WoodType;

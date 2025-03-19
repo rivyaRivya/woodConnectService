@@ -12,6 +12,7 @@ public interface ProductServices {
 //	void deleteProduct(Integer id);
 	void updateProduct(Integer id, ProductDTO product);
 	ProductDTO getProductDetail(Integer id);
+	List getVariant();
 
 
 }

@@ -13,14 +13,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.transport.transport.entity.Driver;
 import com.woodconnectApp.woodconnectApp.dto.ProductDTO;
+import com.woodconnectApp.woodconnectApp.dto.VariantDTO;
+import com.woodconnectApp.woodconnectApp.dto.VariantResponseDTO;
+import com.woodconnectApp.woodconnectApp.dto.VariantValueDTO;
 import com.woodconnectApp.woodconnectApp.dto.WoodTypeDTO;
 import com.woodconnectApp.woodconnectApp.entity.OrderDetails;
 import com.woodconnectApp.woodconnectApp.entity.Product;
+import com.woodconnectApp.woodconnectApp.entity.Variant;
+import com.woodconnectApp.woodconnectApp.entity.VariantValue;
 import com.woodconnectApp.woodconnectApp.entity.WoodType;
 import com.woodconnectApp.woodconnectApp.repository.OrderDetailsRepository;
 import com.woodconnectApp.woodconnectApp.repository.ProductRepository;
+import com.woodconnectApp.woodconnectApp.repository.VariantRepository;
+import com.woodconnectApp.woodconnectApp.repository.VariantValueRepository;
 import com.woodconnectApp.woodconnectApp.repository.WoodTypeRepository;
 import com.woodconnectApp.woodconnectApp.services.ProductServices;
 
@@ -34,7 +40,11 @@ public class ProductServiceImpl implements ProductServices {
 	@Autowired 
 	private OrderDetailsRepository orderDetailRepository;
 	
+	@Autowired 
+	private VariantRepository variantRepository;
 
+	@Autowired
+	private VariantValueRepository variantValueRepository;
 	
 	@Override
 	public List getProduct() {
@@ -183,5 +193,88 @@ public class ProductServiceImpl implements ProductServices {
 		productRepository.save(productData);
 	}
 
+	public void createVariant(VariantDTO variant) {
+		// TODO Auto-generated method stub
+		Variant variant1 = new Variant();
+		variant1.setName(variant.getName());
+		variantRepository.save(variant1);
+	}
 
+	public void createVariantValue(VariantValueDTO variantValue) {
+		// TODO Auto-generated method stub
+		VariantValue variant1 = new VariantValue();
+		variant1.setName(variantValue.getName());
+		if(variantValue.getVariantId() != null) {
+			Variant varaint = variantRepository.findById(variantValue.getVariantId()).get();
+			variant1.setVariant(varaint);
+		}
+		variantValueRepository.save(variant1);
+	}
+	
+
+	@Override
+	public List getVariant() {
+		List<Variant> variant = variantRepository.findAll();
+		List<VariantResponseDTO> variantDetails = new ArrayList<>();
+		for (Variant variantData : variant) //to get multiple items
+			{
+				VariantResponseDTO response = new VariantResponseDTO();
+				response.setId(variantData.getId());
+				response.setType(variantData.getName());
+				List<VariantValue> value = variantValueRepository.findByVariantId(variantData.getId());
+				List<VariantValueDTO> valueDTOs = new ArrayList<>();
+				for (VariantValue variantValueData : value) //to get multiple items
+				{
+
+					VariantValueDTO valueDTO = new VariantValueDTO();
+					valueDTO.setId(variantValueData.getId());
+					valueDTO.setName(variantValueData.getName());
+					valueDTOs.add(valueDTO);
+				}
+				response.setValues(valueDTOs);
+				variantDetails.add(response);
+			}
+		return variantDetails;
+	}
+
+	public String deleteVaraint(Integer id) {
+		 Variant variant = variantRepository
+	                .findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid user Id:" + id));
+		 List<VariantValue> variantValue = variantValueRepository.findByVariantId(id);
+	        
+	        if (!variantValue.isEmpty()) {
+	            // Handle order details (e.g., delete them or update them)
+	        	variantValueRepository.deleteAll(variantValue);
+	            return "Varaint is aligned ";
+	        }
+	        variantRepository.delete(variant);
+		 return "variant deleted successfully";
+		
+	}
+	public String deleteVaraintValue(Integer id) {
+		 VariantValue variant = variantValueRepository
+	                .findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid user Id:" + id));
+		 
+	        variantValueRepository.delete(variant);
+		 return "variant value deleted successfully";
+		
+	}
+
+	public VariantResponseDTO getVariantDetails(Integer id) {
+		Optional<Variant> variantData = variantRepository.findById(id);
+		VariantResponseDTO response = new VariantResponseDTO();
+		response.setId(variantData.get().getId());
+		response.setType(variantData.get().getName());
+		List<VariantValue> value = variantValueRepository.findByVariantId(variantData.get().getId());
+		List<VariantValueDTO> valueDTOs = new ArrayList<>();
+		for (VariantValue variantValueData : value) //to get multiple items
+		{
+
+			VariantValueDTO valueDTO = new VariantValueDTO();
+			valueDTO.setId(variantValueData.getId());
+			valueDTO.setName(variantValueData.getName());
+			valueDTOs.add(valueDTO);
+		}
+		response.setValues(valueDTOs);
+		return response;	}
 }

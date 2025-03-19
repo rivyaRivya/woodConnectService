@@ -34,6 +34,21 @@ public class OrderDetails {
 	public Product getProduct() {
 		return product;
 	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public Integer getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+	public void setOrderTable(OrderTable orderTable) {
+		this.orderTable = orderTable;
+	}
 	public void setProduct(Product product) {
 		this.product = product;
 	}

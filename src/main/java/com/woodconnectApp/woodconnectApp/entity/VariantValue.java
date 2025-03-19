@@ -1,7 +1,5 @@
 package com.woodconnectApp.woodconnectApp.entity;
 
-import java.sql.Date;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Entity;
@@ -13,23 +11,18 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Payment {
+public class VariantValue {
 	@Id
 	@GeneratedValue
     private Integer id;
-	private String payment_status;
-	private String payment_amount;
-	private Date date;
+	private String name;
 	
 	@JsonBackReference
 	@ManyToOne
-    @JoinColumn(name = "order_id", nullable = true)
-	private OrderTable order;
+    @JoinColumn(name = "variantId", nullable = true)
+	private Variant variant;
 	
-	public OrderTable getOrder() {
-		return order;
-	}
-	public void setOrder(OrderTable user) {
-		this.order = user;
+	public Variant getVariant() {
+		return variant;
 	}
 }

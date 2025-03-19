@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.transport.transport.entity.TouristPlace;
 import com.woodconnectApp.woodconnectApp.dto.ProductDTO;
 import com.woodconnectApp.woodconnectApp.dto.QuotationDTO;
 import com.woodconnectApp.woodconnectApp.entity.Product;

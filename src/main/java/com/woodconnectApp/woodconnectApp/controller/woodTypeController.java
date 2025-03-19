@@ -14,9 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.transport.transport.entity.TouristPlace;
-import com.woodconnectApp.woodconnectApp.dto.ProductDTO;
-import com.woodconnectApp.woodconnectApp.dto.UserDTO;
 import com.woodconnectApp.woodconnectApp.dto.WoodTypeDTO;
 import com.woodconnectApp.woodconnectApp.entity.WoodType;
 import com.woodconnectApp.woodconnectApp.service.impl.WoodTypeServiceImpl;

@@ -47,6 +47,78 @@ public class Product {
 	public void setWoodType(WoodType type) {
 		this.woodType = type;
 	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public String getProductname() {
+		return productname;
+	}
+	public void setProductname(String productname) {
+		this.productname = productname;
+	}
+	public String getPrice() {
+		return price;
+	}
+	public void setPrice(String price) {
+		this.price = price;
+	}
+	public String getManufacturedate() {
+		return manufacturedate;
+	}
+	public void setManufacturedate(String manufacturedate) {
+		this.manufacturedate = manufacturedate;
+	}
+	public String getStock() {
+		return stock;
+	}
+	public void setStock(String stock) {
+		this.stock = stock;
+	}
+	public byte[] getImage() {
+		return image;
+	}
+	public void setImage(byte[] image) {
+		this.image = image;
+	}
+	public String getFileType() {
+		return fileType;
+	}
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getWidth() {
+		return width;
+	}
+	public void setWidth(String width) {
+		this.width = width;
+	}
+	public String getLength() {
+		return length;
+	}
+	public void setLength(String length) {
+		this.length = length;
+	}
+	public String getLabourPrice() {
+		return labourPrice;
+	}
+	public void setLabourPrice(String labourPrice) {
+		this.labourPrice = labourPrice;
+	}
+	public String getManufacturePrice() {
+		return manufacturePrice;
+	}
+	public void setManufacturePrice(String manufacturePrice) {
+		this.manufacturePrice = manufacturePrice;
+	}
 	
 //	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 //	private List<OrderDetails> orderDetails;

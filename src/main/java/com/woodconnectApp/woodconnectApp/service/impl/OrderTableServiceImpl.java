@@ -13,15 +13,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.transport.transport.dto.DriverDTO;
-import com.transport.transport.entity.Driver;
 import com.woodconnectApp.woodconnectApp.dto.OrderDetailsDTO;
 import com.woodconnectApp.woodconnectApp.dto.OrderRequest;
 import com.woodconnectApp.woodconnectApp.dto.OrderTableDTO;
 import com.woodconnectApp.woodconnectApp.dto.ProductDTO;
 import com.woodconnectApp.woodconnectApp.entity.OrderDetails;
 import com.woodconnectApp.woodconnectApp.entity.OrderTable;
-import com.woodconnectApp.woodconnectApp.entity.Payment;
 import com.woodconnectApp.woodconnectApp.entity.Product;
 import com.woodconnectApp.woodconnectApp.entity.User;
 import com.woodconnectApp.woodconnectApp.entity.WoodType;
@@ -65,7 +62,8 @@ public class OrderTableServiceImpl implements OrderTableServices {
 		OrderTable orderTable =orderTableRepository
         .findById(id)
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid user Id:" + id));
-		orderTable.setStatus("Confirmed");
+		
+        orderTable.setStatus("Confirmed");
 		orderTableRepository.save(orderTable);
 		System.out.print("done");
 	}
@@ -173,7 +171,7 @@ public class OrderTableServiceImpl implements OrderTableServices {
 	     for (OrderDetails orderDetail : orderDetails) //to get multiple items
 			{	
 	    	 	Optional<Product> product = productRepository.findById(orderDetail.getProduct().getId());
-				ProductDTO productObject = new ProductDTO(id, null, null, null, null, null, id, null, null, null);
+				ProductDTO productObject = new ProductDTO(id, null, null, null, null, null, id, null, null, null, null, null, null, null);
 				productObject.setId(product.get().getId());
 				productObject.setManufacture(product.get().getManufacturedate());
 				productObject.setPrice(product.get().getPrice());

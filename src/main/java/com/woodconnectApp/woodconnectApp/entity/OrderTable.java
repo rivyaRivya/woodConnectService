@@ -57,10 +57,6 @@ public class OrderTable {
 		this.user = user;
 	}
 	
-	@JsonManagedReference
-	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Payment> payment;
-	
 	@JsonBackReference
 	@ManyToOne
     @JoinColumn(name = "driverId", referencedColumnName = "id")
@@ -71,6 +67,52 @@ public class OrderTable {
 	}
 	public void setDriver(User driver) {
 		this.driver = driver;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	public String getOrderDate() {
+		return orderDate;
+	}
+	public void setOrderDate(String orderDate) {
+		this.orderDate = orderDate;
+	}
+	public Double getAdvanced_amount() {
+		return advanced_amount;
+	}
+	public void setAdvanced_amount(Double advanced_amount) {
+		this.advanced_amount = advanced_amount;
+	}
+	public Double getTotal_amount() {
+		return total_amount;
+	}
+	public void setTotal_amount(Double total_amount) {
+		this.total_amount = total_amount;
+	}
+	public String getDelivery_date() {
+		return delivery_date;
+	}
+	public void setDelivery_date(String delivery_date) {
+		this.delivery_date = delivery_date;
+	}
+	public String getAssign_date() {
+		return assign_date;
+	}
+	public void setAssign_date(String assign_date) {
+		this.assign_date = assign_date;
+	}
+	public String getPaymentStatus() {
+		return paymentStatus;
+	}
+	public void setPaymentStatus(String paymentStatus) {
+		this.paymentStatus = paymentStatus;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 }

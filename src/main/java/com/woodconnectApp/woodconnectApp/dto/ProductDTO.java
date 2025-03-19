@@ -41,5 +41,89 @@ public class ProductDTO {
 		this.labourPrice = labourPrice;
 		this.manufacturePrice = manufacturePrice;
 	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public String getProductname() {
+		return productname;
+	}
+	public void setProductname(String productname) {
+		this.productname = productname;
+	}
+	public String getPrice() {
+		return price;
+	}
+	public void setPrice(String price) {
+		this.price = price;
+	}
+	public String getManufacture() {
+		return manufacture;
+	}
+	public void setManufacture(String manufacture) {
+		this.manufacture = manufacture;
+	}
+	public String getStock() {
+		return stock;
+	}
+	public void setStock(String stock) {
+		this.stock = stock;
+	}
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
+	public Integer getWoodType_id() {
+		return WoodType_id;
+	}
+	public void setWoodType_id(Integer woodType_id) {
+		WoodType_id = woodType_id;
+	}
+	public String getWoodtypename() {
+		return woodtypename;
+	}
+	public void setWoodtypename(String woodtypename) {
+		this.woodtypename = woodtypename;
+	}
+	public String getFileType() {
+		return fileType;
+	}
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getWidth() {
+		return width;
+	}
+	public void setWidth(String width) {
+		this.width = width;
+	}
+	public String getLength() {
+		return length;
+	}
+	public void setLength(String length) {
+		this.length = length;
+	}
+	public String getLabourPrice() {
+		return labourPrice;
+	}
+	public void setLabourPrice(String labourPrice) {
+		this.labourPrice = labourPrice;
+	}
+	public String getManufacturePrice() {
+		return manufacturePrice;
+	}
+	public void setManufacturePrice(String manufacturePrice) {
+		this.manufacturePrice = manufacturePrice;
+	}
 
 }
