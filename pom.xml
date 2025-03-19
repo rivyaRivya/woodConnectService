@@ -53,11 +53,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>com.transport</groupId>
-			<artifactId>transport</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+		
 		<dependency>
 	        <groupId>jakarta.platform</groupId>
 	        <artifactId>jakarta.jakartaee-web-api</artifactId>

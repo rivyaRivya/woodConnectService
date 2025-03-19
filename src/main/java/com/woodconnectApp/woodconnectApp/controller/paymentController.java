@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.transport.transport.dto.BookingDTO;
 import com.woodconnectApp.woodconnectApp.dto.PaymentDTO;
 import com.woodconnectApp.woodconnectApp.dto.ProductDTO;
 import com.woodconnectApp.woodconnectApp.service.impl.PaymentServiceImpl;

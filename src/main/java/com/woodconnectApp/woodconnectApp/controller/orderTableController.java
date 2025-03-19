@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.transport.transport.dto.DriverDTO;
 import com.woodconnectApp.woodconnectApp.dto.OrderDetailsDTO;
 import com.woodconnectApp.woodconnectApp.dto.OrderRequest;
 import com.woodconnectApp.woodconnectApp.dto.OrderTableDTO;
@@ -55,12 +54,12 @@ public class orderTableController {
        order.setStatus(orderRequest.getOrderStatus());
        order.setOrderDate(orderRequest.getOrderDate());
        order.setPaymentStatus("pending");
-       User user = userRepository.findById(orderRequest.getUserId()).orElseThrow(() -> new RuntimeException("user not found"));
+       User user =  (User) userRepository.findById(orderRequest.getUserId());
        order.setUser(user);
        
        List<OrderDetails> orderDetailsList = orderRequest.getProducts().stream()
                .map(productRequest -> {
-                   Product product = productRepository.findById(productRequest.getProductId()).orElseThrow(() -> new RuntimeException("Product not found"));
+                   Product product = (Product) productRepository.findById(productRequest.getProductId());
                    OrderDetails orderDetails = new OrderDetails();                   
                    orderDetails.setOrderTable(order); // Set the order reference
                    orderDetails.setProduct(product); // Set the product reference
