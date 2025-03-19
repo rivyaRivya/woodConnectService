@@ -52,5 +52,5 @@ public class OrderDetails {
 	public void setProduct(Product product) {
 		this.product = product;
 	}
-
+	
 }

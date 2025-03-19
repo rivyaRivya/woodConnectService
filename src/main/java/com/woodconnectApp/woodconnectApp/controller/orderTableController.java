@@ -2,6 +2,7 @@ package com.woodconnectApp.woodconnectApp.controller;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -52,12 +53,12 @@ public class orderTableController {
        order.setStatus(orderRequest.getOrderStatus());
        order.setOrderDate(orderRequest.getOrderDate());
        order.setPaymentStatus("pending");
-       User user = userRepository.findById(orderRequest.getUserId()).orElseThrow(() -> new RuntimeException("user not found"));
+       User user =  userRepository.findById(orderRequest.getUserId()).get();
        order.setUser(user);
        
        List<OrderDetails> orderDetailsList = orderRequest.getProducts().stream()
                .map(productRequest -> {
-                   Product product = productRepository.findById(productRequest.getProductId()).orElseThrow(() -> new RuntimeException("Product not found"));
+                   Product product = productRepository.findById(productRequest.getProductId()).get();
                    OrderDetails orderDetails = new OrderDetails();                   
                    orderDetails.setOrderTable(order); // Set the order reference
                    orderDetails.setProduct(product); // Set the product reference
