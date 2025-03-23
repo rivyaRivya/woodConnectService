@@ -4,15 +4,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.woodconnectApp.woodconnectApp.dto.ProductDTO;
 import com.woodconnectApp.woodconnectApp.dto.VariantDTO;
 import com.woodconnectApp.woodconnectApp.dto.VariantResponseDTO;
@@ -52,7 +55,7 @@ public class ProductServiceImpl implements ProductServices {
 		List<ProductDTO> productDetails = new ArrayList<>();
 		for (Product product : products) //to get multiple items
 			{		    
-			ProductDTO productObject = new ProductDTO(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+			ProductDTO productObject = new ProductDTO(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, false, null, null);
 			if(product.getWoodType() != null) {
 			Optional<WoodType> wood = woodtypeRepository.findById(product.getWoodType().getId());
 		    
@@ -64,18 +67,51 @@ public class ProductServiceImpl implements ProductServices {
 				    productObject.setWoodtypename(null);
 					
 			}
+			productObject.setFeatured(product.getIsFeatured());
 			productObject.setId(product.getId());
 		    productObject.setProductname(product.getProductname());
 		    productObject.setPrice(product.getPrice());
 		    productObject.setManufacture(product.getManufacturedate());
 		    productObject.setStock(product.getStock());
-//		    productObject.setImage(product.getImage());
+		    productObject.setDisplay(product.getImage());
 		    productObject.setDescription(product.getDescription());
 		   productDetails.add(productObject);
 		}
 		return productDetails;
 		}
 
+	@Override
+	public List<ProductDTO> getProductByWood(Integer id) {
+		List<Product> products = productRepository.findByWoodTypeId(id);
+		List<ProductDTO> productDetails = new ArrayList<>();
+		for (Product product : products) //to get multiple items
+			{		    
+			ProductDTO productObject = new ProductDTO(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, false, null, id);
+			if(product.getWoodType() != null) {
+			Optional<WoodType> wood = woodtypeRepository.findById(product.getWoodType().getId());
+		    
+		    productObject.setWoodType_id(wood.get().getId());
+		    productObject.setWoodtypename(wood.get().getWoodname());
+			}
+			else {
+				    productObject.setWoodType_id(null);
+				    productObject.setWoodtypename(null);
+					
+			}
+			productObject.setFeatured(product.getIsFeatured());
+			productObject.setId(product.getId());
+		    productObject.setProductname(product.getProductname());
+		    productObject.setPrice(product.getPrice());
+		    productObject.setManufacture(product.getManufacturedate());
+		    productObject.setStock(product.getStock());
+		    productObject.setDisplay(product.getImage());
+		    productObject.setDescription(product.getDescription());
+		   productDetails.add(productObject);
+		}
+		return productDetails;
+		}
+
+	
 	public String deleteProduct(Integer id) {
 		 Product product = productRepository
 	                .findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid user Id:" + id));
@@ -99,6 +135,9 @@ public class ProductServiceImpl implements ProductServices {
 		productData.setPrice(product.getPrice());
 		productData.setDescription(product.getDescription());
 		productData.setManufacturedate(product.getManufacture());
+		if(product.isFeatured()) {
+			productData.setIsFeatured(product.isFeatured());
+		}
 		if(product.getImage() != null) {
 			byte[] imageBytes = product.getImage().getBytes();
 			productData.setImage(imageBytes);
@@ -115,19 +154,22 @@ public class ProductServiceImpl implements ProductServices {
 	                .findById(id)
 	                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid user Id:" + id));
 		
-			    
-		ProductDTO productObject = new ProductDTO(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+		System.out.print(product+"poooooooooooooooooooooooooo");
+		ProductDTO productObject = new ProductDTO(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, false, null, id);
 		 productObject.setId(product.getId());
 		 if(product.getWoodType() != null) {
 			Optional<WoodType> wood = woodtypeRepository.findById(product.getWoodType().getId());
 		   productObject.setWoodType_id(wood.get().getId());
 		    productObject.setWoodtypename(wood.get().getWoodname());
+		    productObject.setWoodPrice(wood.get().getPrice());
 		}
 		else {
 			    productObject.setWoodType_id(null);
 			    productObject.setWoodtypename(null);
+			    productObject.setWoodPrice(null);
 				
 		}
+	    productObject.setFeatured(product.getIsFeatured());
 	    productObject.setProductname(product.getProductname());
 	    productObject.setPrice(product.getPrice());
 	    productObject.setManufacture(product.getManufacturedate());
@@ -136,6 +178,7 @@ public class ProductServiceImpl implements ProductServices {
 	    productObject.setWidth(product.getWidth());
 	    productObject.setManufacturePrice(product.getManufacturePrice());
 	    productObject.setLabourPrice(product.getLabourPrice());
+	    productObject.setVariant(product.getVariant());
 	    if(product.getImage()!=null) {
 		    String base64Image = Base64.getEncoder().encodeToString(product.getImage());
 	
@@ -146,7 +189,7 @@ public class ProductServiceImpl implements ProductServices {
 	}
 
 	public void createProduct(String productname, String description, String price, Integer woodType_id,
-			byte[] image, String manufacture,String stock,String length,String width,String labourPrice,String manufacturePrice) {
+			byte[] image, String manufacture,String stock,String length,String width,String labourPrice,String manufacturePrice, String variant,boolean isFeatured) {
 		// TODO Auto-generated method stub
 		Product productinfo = new Product();
 		System.out.print(productname+"OOOOOOOOOOOOOOOOOOO");
@@ -161,8 +204,10 @@ public class ProductServiceImpl implements ProductServices {
 		productinfo.setManufacturedate(manufacture);
 		productinfo.setImage(image);
 		productinfo.setStock(stock);
+		productinfo.setVariant(variant);
 
 		productinfo.setLength(length);
+		productinfo.setIsFeatured(isFeatured);
 		productinfo.setWidth(width);
 		productinfo.setManufacturePrice(manufacturePrice);
 		productinfo.setLabourPrice(labourPrice);
@@ -171,7 +216,7 @@ public class ProductServiceImpl implements ProductServices {
 	}
 
 	public void updateProduct(Integer id, String productname, String description, String price, Integer woodType_id,
-			byte[] image, String manufacture, String stock,String length,String width,String labourPrice,String manufacturePrice) {
+			byte[] image, String manufacture, String stock,String length,String width,String labourPrice,String manufacturePrice,String variant,boolean isFeatured) {
 		Product productData =productRepository
 		        .findById(id)
 		        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid user Id:" + id));
@@ -183,6 +228,10 @@ public class ProductServiceImpl implements ProductServices {
 		productData.setWidth(width);
 		productData.setManufacturePrice(manufacturePrice);
 		productData.setLabourPrice(labourPrice);
+		productData.setVariant(variant);
+		if(isFeatured) {
+			productData.setIsFeatured(isFeatured);
+		}
 		if(image != null) {
 			productData.setImage(image);
 		}

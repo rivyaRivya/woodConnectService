@@ -22,13 +22,19 @@ public class ProductDTO {
 	private String length;
 	private String labourPrice;
 	private String manufacturePrice;
+	private String variant;
+	private String woodPrice;
+	private boolean isFeatured;
+	private byte[] display;
+	private Integer quantity;
 	public ProductDTO(Integer id,String productname,String price,
 			String manufacture,String stock,String image,Integer WoodType_id,String woodtypename,String fileType,String description,
-			String length,String width,String labourPrice,String manufacturePrice) {
+			String length,String width,String labourPrice,String manufacturePrice,String variant,String woodPrice, boolean isFeatured,byte[] display,Integer quantity) {
 		super();
 		this.id = id;
 		this.productname = productname;
 		this.price = price;
+		this.woodPrice=woodPrice;
 		this.manufacture = manufacture;
 		this.stock = stock;
 		this.image = image;
@@ -40,6 +46,10 @@ public class ProductDTO {
 		this.length = length;
 		this.labourPrice = labourPrice;
 		this.manufacturePrice = manufacturePrice;
+		this.variant = variant;
+		this.isFeatured = isFeatured;
+		this.display = display;
+		this.quantity = quantity;
 	}
 	public Integer getId() {
 		return id;
@@ -124,6 +134,10 @@ public class ProductDTO {
 	}
 	public void setManufacturePrice(String manufacturePrice) {
 		this.manufacturePrice = manufacturePrice;
+	}
+	public void setWoodPrice(String woodPrice) {
+		// TODO Auto-generated method stub
+		this.woodPrice = woodPrice;
 	}
 
 }

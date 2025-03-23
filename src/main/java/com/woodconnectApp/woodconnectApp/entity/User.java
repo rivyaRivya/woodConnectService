@@ -9,6 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
 
@@ -29,7 +30,17 @@ public class User {
 	private String district;
 	private String type; 
 	private String password;
+	@Lob
+	private byte[] fileContent;
+	private String fileName;
+	public byte[] getFileContent() {
+        return fileContent;
+    }
 
+    public void setFileContent(byte[] fileContent) {
+        this.fileContent = fileContent;
+    }
+    
 	public Integer getId() {
 		return id;
 	}

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.woodconnectApp.woodconnectApp.dto.WoodTypeDTO;
@@ -19,22 +20,12 @@ public class WoodTypeServiceImpl implements WoodTypeServices{
 	
 	@Autowired
 	private WoodTypeRepository woodtypeRepository;
-	
-	@Override
-	public Integer createWoodType(WoodTypeDTO woodtypeData) {
-		WoodType woodtypeinfo = new WoodType();
-		woodtypeinfo.setWoodname(woodtypeData.getWoodname());
-		woodtypeinfo.setPrice(woodtypeData.getPrice());
-		woodtypeRepository.save(woodtypeinfo);
-		return null;
-	}
-
 
 
 	public List<WoodTypeDTO> getWoods() {
 		// TODO Auto-generated method stub
 		return woodtypeRepository.findAll().stream()
-		        .map(driver -> new WoodTypeDTO(driver.getId(), driver.getWoodname(), driver.getPrice()))
+		        .map(driver -> new WoodTypeDTO(driver.getId(), driver.getWoodname(), driver.getPrice(), driver.getImage()))
 		        .collect(Collectors.toList());
 	}
 	@Override
@@ -44,20 +35,37 @@ public class WoodTypeServiceImpl implements WoodTypeServices{
 
 		woodtypeRepository.delete(woodType);
 	}
-	@Override
-	public void updateWoodType(Integer id, WoodTypeDTO wood) {
-		WoodType woodData =woodtypeRepository
-        .findById(id)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid user Id:" + id));
-		woodData.setPrice(wood.getPrice());
-		woodtypeRepository.save(woodData);
-	}
+	
 	@Override
 	public WoodType getWoodDetail(Integer id) {
 		WoodType woodType = woodtypeRepository
 	                .findById(id)
 	                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid user Id:" + id));
 	        return woodType;
+	}
+
+
+
+	public void createWoodType(String woodname, String price, byte[] imageBytes) {
+		// TODO Auto-generated method stub
+		WoodType woodtypeinfo = new WoodType();
+		woodtypeinfo.setWoodname(woodname);
+		woodtypeinfo.setPrice(price);
+		woodtypeinfo.setImage(imageBytes);
+		woodtypeRepository.save(woodtypeinfo);
+		return;
+	}
+
+
+
+	public void updateWoodType(Integer id, String woodname, String price, byte[] imageBytes) {
+		// TODO Auto-generated method stub
+		WoodType woodData =woodtypeRepository
+		        .findById(id)
+		        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid user Id:" + id));
+				woodData.setPrice(price);
+				woodData.setImage(imageBytes);
+				woodtypeRepository.save(woodData);
 	}
 
 

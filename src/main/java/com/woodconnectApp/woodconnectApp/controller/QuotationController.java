@@ -21,7 +21,7 @@ import com.woodconnectApp.woodconnectApp.dto.QuotationDTO;
 import com.woodconnectApp.woodconnectApp.service.impl.QuotationServiceImpl;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:3000,http://localhost:8081", maxAge = 3600)
 public class QuotationController {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

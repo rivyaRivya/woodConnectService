@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.woodconnectApp.woodconnectApp.dto.ProductDTO;
 import com.woodconnectApp.woodconnectApp.dto.VariantDTO;
 import com.woodconnectApp.woodconnectApp.dto.VariantResponseDTO;
@@ -30,7 +31,7 @@ import com.woodconnectApp.woodconnectApp.service.impl.ProductServiceImpl;
 import com.woodconnectApp.woodconnectApp.service.impl.WoodTypeServiceImpl;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:3000,http://localhost:8081", maxAge = 3600)
 public class productController {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -51,12 +52,14 @@ public class productController {
             @RequestParam("length") String length,
             @RequestParam("width") String width, 
             @RequestParam("labourPrice") String labourPrice,
-            @RequestParam("manufacturePrice") String manufacturePrice) {
+            @RequestParam("manufacturePrice") String manufacturePrice,
+            @RequestParam("variant") String variant,
+            @RequestParam("isFeatured") boolean isFeatured) {
     // Convert image to byte array
        try {
     	   
         	   byte[] imageBytes = image.getBytes();
-        	   productServices.createProduct(productname,description,price,woodType_id,imageBytes,manufacture, stock,length,width,labourPrice,manufacturePrice);
+        	   productServices.createProduct(productname,description,price,woodType_id,imageBytes,manufacture, stock,length,width,labourPrice,manufacturePrice,variant,isFeatured);
         	   return new ResponseEntity("Product added.", HttpStatus.ACCEPTED);
            
     	   } catch (IOException e) {
@@ -71,11 +74,19 @@ public class productController {
 	public ResponseEntity<List<ProductDTO>> getProduct(){
 		return ResponseEntity.ok(productServices.getProduct());
 	} 
+	
+	
 	@GetMapping("/product-details")
     public ProductDTO getproductdetails(@RequestParam Integer id) {
         return productServices.getProductDetail(id);
     }
-
+	
+	@GetMapping("/productList")
+    public ResponseEntity<List<ProductDTO>> getProductByWood(@RequestParam Integer id) {
+		System.out.print(id+"sssssssssssssssssssssssssssss");
+        return ResponseEntity.ok(productServices.getProductByWood(id));
+    }
+	
 	 @DeleteMapping("delete-product/{id}")
 	    public ResponseEntity<Void> deleteProduct(@PathVariable Integer id){
 	    	productServices.deleteProduct(id);
@@ -92,13 +103,15 @@ public class productController {
 	            @RequestParam("length") String length,
 	            @RequestParam("width") String width,
 	            @RequestParam("labourPrice") String labourPrice,
-	            @RequestParam("manufacturePrice") String manufacturePrice) {
+	            @RequestParam("manufacturePrice") String manufacturePrice,
+	            @RequestParam("variant") String variant,
+	            @RequestParam("isFeatured") boolean isFeatured) {
 		 byte[] imageBytes;
 		try {
 			if(image != null) {
 			imageBytes = image.getBytes();
 			}else {imageBytes = null;}
-			productServices.updateProduct(id, productname,description,price,woodType_id,imageBytes,manufacture, stock,length,width,labourPrice,manufacturePrice);
+			productServices.updateProduct(id, productname,description,price,woodType_id,imageBytes,manufacture, stock,length,width,labourPrice,manufacturePrice,variant,isFeatured);
 
 		    
 		} catch (IOException e) {

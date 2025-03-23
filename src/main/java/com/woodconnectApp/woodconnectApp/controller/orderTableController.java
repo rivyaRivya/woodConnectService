@@ -28,7 +28,7 @@ import com.woodconnectApp.woodconnectApp.service.impl.OrderTableServiceImpl;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:3000,http://localhost:8081", maxAge = 3600)
 public class orderTableController {
 	
 	public static void main(String[] args) {
@@ -46,27 +46,21 @@ public class orderTableController {
 	private UserRepository userRepository;
 	
 	@PostMapping("/create-order")
-    public String createOrderTable(@RequestBody OrderRequest  orderRequest) {
+    public Integer createOrderTable(@RequestBody OrderRequest  orderRequest) {
        OrderTable order = new OrderTable();
        order.setAdvanced_amount(orderRequest.getAdvanced_amount());
        order.setTotal_amount(orderRequest.getTotalAmount());
        order.setStatus(orderRequest.getOrderStatus());
        order.setOrderDate(orderRequest.getOrderDate());
-       order.setPaymentStatus("pending");
-       User user =  userRepository.findById(orderRequest.getUserId()).get();
-       order.setUser(user);
-       
-       List<OrderDetails> orderDetailsList = orderRequest.getProducts().stream()
-               .map(productRequest -> {
-                   Product product = productRepository.findById(productRequest.getProductId()).get();
-                   OrderDetails orderDetails = new OrderDetails();                   
-                   orderDetails.setOrderTable(order); // Set the order reference
-                   orderDetails.setProduct(product); // Set the product reference
-                   return orderDetails;
-               })
-               .toList();
-         orderTableServices.createOrderTable(order,orderDetailsList);
-        return "OrderTable added successfully";
+       order.setPaymentStatus(orderRequest.getPaymentStatus());
+//       User user =  userRepository.findById(orderRequest.getUserId()).get();
+//       order.setUser(user);
+       Product product = productRepository.findById(orderRequest.getProductId()).get();
+       OrderDetails orderDetails = new OrderDetails(); 
+       orderDetails.setQuantity(orderRequest.getQuantity());
+       orderDetails.setOrderTable(order); // Set the order reference
+       orderDetails.setProduct(product); // Set the product reference
+       return orderTableServices.createOrderTable(order,orderDetails,orderRequest);
     }
 	
 	@PutMapping("/update-orderTable/{id}")
@@ -86,5 +80,9 @@ public class orderTableController {
         return orderTableServices.getOrderDetails(id);
     }
 	
+	@GetMapping("/get-orderId")
+    public Integer getOrderId(@RequestParam Integer id) {
+        return orderTableServices.getOrderId(id);
+    }
 	  
 }

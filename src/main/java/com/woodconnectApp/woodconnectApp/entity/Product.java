@@ -2,10 +2,12 @@ package com.woodconnectApp.woodconnectApp.entity;
 
 import java.sql.Blob;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.databind.JsonNode;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -35,6 +37,19 @@ public class Product {
 	private String length;
 	private String labourPrice;
 	private String manufacturePrice;
+	private boolean isFeatured;
+	
+	@Lob
+	 private String variant; // Stores the JSON as a Map
+
+	    // Getter and Setter
+	    public String getJsonData() {
+	        return variant;
+	    }
+
+	    public void setJsonData(String jsonData) {
+	        this.variant = jsonData;
+	    }
 	
 	@JsonBackReference
 	@ManyToOne
@@ -47,6 +62,14 @@ public class Product {
 	public void setWoodType(WoodType type) {
 		this.woodType = type;
 	}
+	
+	public boolean getIsFeatured() {
+		return isFeatured;
+	}
+	public void setIsFeatured(boolean type) {
+		this.isFeatured = type;
+	}
+	
 	public Integer getId() {
 		return id;
 	}

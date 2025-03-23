@@ -12,4 +12,8 @@ public interface UserRepository  extends JpaRepository<User, Integer> {
 	 // Method to count orders with status 'Delivered'
     @Query("SELECT COUNT(o) FROM User o WHERE o.type = 'user'")
     long countOrdersWithCustomer();
+    
+    User findByEmailAndPassword(String email, String password);
+    
+    
 }

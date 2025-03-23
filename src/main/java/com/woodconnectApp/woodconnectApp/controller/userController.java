@@ -1,5 +1,6 @@
 package com.woodconnectApp.woodconnectApp.controller;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.woodconnectApp.woodconnectApp.dto.TotalCount;
@@ -26,7 +28,7 @@ import com.woodconnectApp.woodconnectApp.service.impl.UserServiceImpl;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:3000,http://localhost:8081", maxAge = 3600)
 public class userController {
 
 	public static void main(String[] args) {
@@ -38,10 +40,21 @@ public class userController {
     private UserServiceImpl userServices;
 	
 	@PostMapping("/user")
-    public String createBooking(@RequestBody UserDTO  userinfo) {
-       System.out.print(userinfo);
+    public String createBooking(
+            @RequestParam("firstname") String firstname,
+            @RequestParam(name="lastname", required = false) String lastname,
+            @RequestParam(name="address", required = false) String address,
+            @RequestParam("email") String email,
+            @RequestParam(name="dob", required = false) String dob,
+            @RequestParam("phone") String phone,
+            @RequestParam(name="gender", required = false) String gender, 
+            @RequestParam(name="pin", required = false) String pin,
+            @RequestParam(name="district", required = false) String district,
+            @RequestParam("type") String type,
+            @RequestParam("password") String password,
+            @RequestParam(name="file", required = false) MultipartFile file) throws IOException {
         
-         userServices.createUser(userinfo);
+         userServices.createUser(firstname,lastname,address,email,dob,phone,gender,pin,district,type,password,file);
         return "User added successfully";
     }
 	

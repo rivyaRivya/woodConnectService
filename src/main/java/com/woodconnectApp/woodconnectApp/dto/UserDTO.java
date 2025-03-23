@@ -16,9 +16,10 @@ public class UserDTO {
 	private String district;
 	private String type;
 	private String password;
+	private byte[] file;
 	public UserDTO(Integer id,String firstname,String lastname,String dob,String email,
 			String phone,String gender,String address,String pin,String district,
-			String type,String password) {
+			String type,String password,byte[] file) {
 		super();
 		this.id = id;
 		this.firstname = firstname;
@@ -32,6 +33,8 @@ public class UserDTO {
 		this.district = district;
 		this.type = type;
 		this.password = password;
+
+		this.file = file;
 	}
 	public Integer getId() {
 		return id;

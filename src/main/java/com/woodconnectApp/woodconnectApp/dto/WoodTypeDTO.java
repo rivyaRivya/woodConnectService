@@ -7,11 +7,14 @@ public class WoodTypeDTO {
 	private Integer id;
 	private String woodname;
 	private String price;
-	public WoodTypeDTO(Integer id,String woodname,String price){
+
+	private byte[] image;
+	public WoodTypeDTO(Integer id,String woodname,String price,byte[] bs){
 		super();
 		this.id = id;
 		this.woodname = woodname;
 		this.price = price;
+		this.image = bs;
 	}
 	public Integer getId() {
 		return id;

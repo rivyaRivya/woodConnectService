@@ -14,7 +14,7 @@ import com.woodconnectApp.woodconnectApp.dto.ReviewDTO;
 import com.woodconnectApp.woodconnectApp.service.impl.ReviewServiceImpl;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:3000,http://localhost:8081", maxAge = 3600)
 public class ReviewController {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

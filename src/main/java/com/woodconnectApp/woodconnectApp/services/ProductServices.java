@@ -13,6 +13,7 @@ public interface ProductServices {
 	void updateProduct(Integer id, ProductDTO product);
 	ProductDTO getProductDetail(Integer id);
 	List getVariant();
+	List getProductByWood(Integer id);
 
 
 }

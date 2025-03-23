@@ -98,19 +98,68 @@ public class OrderTableServiceImpl implements OrderTableServices {
 //		
 //	}
 
-	public OrderTable createOrderTable(OrderTable order, List<OrderDetails> orderDetailsList) {
-		// TODO Auto-generated method stub
-		// Save the order to get the generated order ID
+	public Integer createOrderTable(OrderTable order, OrderDetails orderDetailsObj, OrderRequest orderRequest) {
+    OrderDetails orderDetails = new OrderDetails();
+    
+    // Fetch user details
+    User user = userRepository.findById(orderRequest.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
+    order.setUser(user);
+
+    // Check if the user has a pending order
+    List<OrderTable> savedOrders = orderTableRepository.findPendingOrder(orderRequest.getUserId(), "pending");
+
+    if (savedOrders.isEmpty()) {
+        // No pending order, create a new order
+        order.setTotal_amount(Double.parseDouble(orderDetailsObj.getProduct().getPrice()) * orderDetailsObj.getQuantity());
         OrderTable savedOrder = orderTableRepository.save(order);
+        
+        orderDetailsObj.setOrderTable(savedOrder);
+        orderDetails = orderDetailsRepository.save(orderDetailsObj);
+    } else {
+        // Pending order exists, update or add new order item
+        OrderTable existingOrder = savedOrders.get(0); // Get the first pending order
 
-        // Set the order ID in each OrderDetails and save them
-        for (OrderDetails orderDetails : orderDetailsList) {
-            orderDetails.setOrderTable(savedOrder);
+        List<OrderDetails> orderDetailsList = orderDetailsRepository.findByorderTable_id(existingOrder.getId());
+
+        boolean productExists = false;
+
+        for (OrderDetails existingDetail : orderDetailsList) {
+            if (existingDetail.getProduct().getId().equals(orderDetailsObj.getProduct().getId())) {
+                // Product exists, update quantity
+            	Integer quantity = 0;
+            	if("inc".equals(orderRequest.getType()))
+            		quantity = existingDetail.getQuantity() + orderDetailsObj.getQuantity();
+            	else if("dec".equals(orderRequest.getType()))
+            		quantity = existingDetail.getQuantity() - orderDetailsObj.getQuantity();
+            	System.out.print(quantity+orderRequest.getType()+"OOOOOoooooooooooooooooooooooo");
+
+            	existingDetail.setQuantity(quantity);
+                existingOrder.setTotal_amount(existingOrder.getTotal_amount() +
+                        Double.parseDouble(orderDetailsObj.getProduct().getPrice()) * orderDetailsObj.getQuantity());
+
+                orderDetails = orderDetailsRepository.save(existingDetail);
+                productExists = true;
+                break;
+            }
         }
-        orderDetailsRepository.saveAll(orderDetailsList);
 
-        return savedOrder;
-	}
+        if (!productExists) {
+            // Add new product to the existing order
+            existingOrder.setTotal_amount(existingOrder.getTotal_amount() +
+                    Double.parseDouble(orderDetailsObj.getProduct().getPrice()) * orderDetailsObj.getQuantity());
+
+            orderDetailsObj.setOrderTable(existingOrder);
+            orderDetails = orderDetailsRepository.save(orderDetailsObj);
+        }
+
+        // Save updated order
+        orderTableRepository.save(existingOrder);
+    }
+
+    return orderDetails.getId();
+}
+
+
 
 	public List<OrderTableDTO> getOrders() {
 		List<OrderTable> orders = orderTableRepository.findAll();
@@ -171,12 +220,13 @@ public class OrderTableServiceImpl implements OrderTableServices {
 	     for (OrderDetails orderDetail : orderDetails) //to get multiple items
 			{	
 	    	 	Optional<Product> product = productRepository.findById(orderDetail.getProduct().getId());
-				ProductDTO productObject = new ProductDTO(id, null, null, null, null, null, id, null, null, null, null, null, null, null);
+				ProductDTO productObject = new ProductDTO(id, null, null, null, null, null, id, null, null, null, null, null, null, null, null, null, false, null, null);
 				productObject.setId(product.get().getId());
 				productObject.setManufacture(product.get().getManufacturedate());
 				productObject.setPrice(product.get().getPrice());
 				productObject.setStock(product.get().getStock());
 				productObject.setProductname(product.get().getProductname());
+				productObject.setQuantity(orderDetail.getQuantity());
 				if(product.get().getWoodType() != null) {
 					Optional<WoodType> wood = woodTypeRepository.findById(product.get().getWoodType().getId());
 					productObject.setWoodtypename(wood.get().getWoodname());
@@ -199,6 +249,15 @@ public class OrderTableServiceImpl implements OrderTableServices {
 	public void updateStatus(Integer id, OrderTableDTO orderTable) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public Integer getOrderId(Integer id) {
+	    List<OrderTable> savedOrders = orderTableRepository.findPendingOrder(id, "pending");
+	    if (!savedOrders.isEmpty()) {
+	    	OrderTable existingOrder = savedOrders.get(0); // Get the first pending order
+	    	return existingOrder.getId();
+	    }else
+	    	return 0;
 	}
 	
 
