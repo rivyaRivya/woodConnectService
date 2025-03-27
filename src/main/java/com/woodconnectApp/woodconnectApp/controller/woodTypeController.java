@@ -70,7 +70,7 @@ public class woodTypeController {
 	    public ResponseEntity<Void> updateWoodType(@PathVariable Integer id,
 	            @RequestParam("woodName") String woodname,
 	            @RequestParam("price") String price,
-	            @RequestParam("image") MultipartFile image) {
+	            @RequestParam(name="image",required=false) MultipartFile image) {
 		  try {byte[] imageBytes;
 				if(image != null) {
 				imageBytes = image.getBytes();

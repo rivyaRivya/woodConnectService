@@ -185,7 +185,7 @@ public Integer createOrderTable(OrderTable order, OrderDetails orderDetailsObj, 
 		List<OrderTableDTO> orderList = new ArrayList<>();
 		for (OrderTable order : orders) //to get multiple items
 			{	
-				OrderTableDTO orderObject = new OrderTableDTO(null, null, null, null, null, null, null, null,null, null, null, null);
+				OrderTableDTO orderObject = new OrderTableDTO(null, null, null, null, null, null, null, null,null, null, null, null, null, null, null, null, null);
 				orderObject.setAdvanced_amount(order.getAdvanced_amount());
 				orderObject.setAssign_date(order.getAssign_date());
 				orderObject.setDelivery_date(order.getDelivery_date());
@@ -215,7 +215,7 @@ public Integer createOrderTable(OrderTable order, OrderDetails orderDetailsObj, 
 	                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid order Id:" + id));
 	     List<OrderDetails> orderDetails = orderDetailsRepository
 	                .findByorderTable_id(id);
-	     OrderTableDTO orderData = new OrderTableDTO(id, null, null, null, null, null, null, id, null, id, null, null);
+	     OrderTableDTO orderData = new OrderTableDTO(id, null, null, null, null, null, null, id, null, id, null, null, null, null, null, null, null);
 	     orderData.setAdvanced_amount(order.getAdvanced_amount());
 	     orderData.setAssign_date(order.getAssign_date());
 	     orderData.setDelivery_date(order.getDelivery_date());
@@ -228,7 +228,12 @@ public Integer createOrderTable(OrderTable order, OrderDetails orderDetailsObj, 
 				Optional<User> user = userRepository.findById(order.getUser().getId());
 				orderData.setUserId(user.get().getId());
 				orderData.setUsername(user.get().getFirstname() + " " +user.get().getLastname());
-			}
+				orderData.setAddress(user.get().getAddress());
+				orderData.setDistrict(user.get().getDistrict());
+				orderData.setPin(user.get().getPin());
+				orderData.setEmail(user.get().getEmail());
+				orderData.setMobile(user.get().getMobile());
+	     }
 			if(order.getDriver() != null) {
 				Optional<User> driver = userRepository.findById(order.getDriver().getId());
 				orderData.setDriverId(driver.get().getId());
@@ -288,7 +293,14 @@ public Integer createOrderTable(OrderTable order, OrderDetails orderDetailsObj, 
 		OrderTable orderTable =orderTableRepository
 		        .findById(id)
 		        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid user Id:" + id));
-				
+	 if("Delivered".equals(status)) {
+		 LocalDate currentDate = LocalDate.now();
+        // Formatting the current date to a string (e.g., "2025-03-09")
+        String formattedDate = currentDate.format(DateTimeFormatter.ISO_DATE);
+        orderTable.setPaymentStatus("Paid");
+        orderTable.setDelivery_date(formattedDate);
+			 
+	 }
     orderTable.setStatus(status);
 	orderTableRepository.save(orderTable);
 		

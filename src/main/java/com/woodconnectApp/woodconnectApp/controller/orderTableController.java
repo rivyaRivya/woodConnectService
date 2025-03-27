@@ -64,7 +64,7 @@ public class orderTableController {
     }
 	
 	@PutMapping("/update-orderTable/{id}")
-	public ResponseEntity<Void> updateOrderTableStatus(@PathVariable Integer id, @RequestParam("driver_id") Integer driver_id, @RequestParam("deliverydate") String deliverydate) {
+	public ResponseEntity<Void> updateOrderTableStatus(@PathVariable Integer id, @RequestParam("driver_id") Integer driver_id, @RequestParam(name="deliverydate",required = false) String deliverydate) {
     	
 		orderTableServices.updateDriver(id,driver_id,deliverydate);
         return ResponseEntity.noContent().build();

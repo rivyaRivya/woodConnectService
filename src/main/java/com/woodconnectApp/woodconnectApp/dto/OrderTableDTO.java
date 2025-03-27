@@ -20,10 +20,16 @@ public class OrderTableDTO {
 	private Integer driverId;
 	private String driverName;
 	private String paymentStatus;
+	private String address;
+	private String pin;
+	private String district;
+	private String mobile;
+	private String email;
 	
 	public OrderTableDTO(Integer id,String status,String orderDate,Double advanced_amount,
 			Double total_amount,String delivery_date,String assign_date,Integer userId,String username,
-			Integer driverId,String driverName,String paymentStatus){
+			Integer driverId,String driverName,String paymentStatus
+			,String address,String pin,String district,String mobile,String email){
 		super();
 		this.id = id;
 		this.status = status;
@@ -37,6 +43,11 @@ public class OrderTableDTO {
 		this.driverId = driverId;
 		this.driverName= driverName;
 		this.paymentStatus = paymentStatus;
+		this.address = address;
+		this.pin = pin;
+		this.district = district;
+		this.mobile = mobile;
+		this.email = email;
 	}
 	
 	public List<ProductDTO> getProducts() {
