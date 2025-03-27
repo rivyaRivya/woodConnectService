@@ -179,6 +179,7 @@ public class ProductServiceImpl implements ProductServices {
 	    productObject.setManufacturePrice(product.getManufacturePrice());
 	    productObject.setLabourPrice(product.getLabourPrice());
 	    productObject.setVariant(product.getVariant());
+	    productObject.setThickness(product.getThickness());
 	    if(product.getImage()!=null) {
 		    String base64Image = Base64.getEncoder().encodeToString(product.getImage());
 	

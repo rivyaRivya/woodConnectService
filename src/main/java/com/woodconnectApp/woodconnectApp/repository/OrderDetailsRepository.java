@@ -14,6 +14,6 @@ public interface OrderDetailsRepository extends JpaRepository<OrderDetails, Inte
 	List<OrderDetails> findByProductId(Integer id);
 	
 	@Query("SELECT COALESCE(SUM(od.quantity), 0) FROM OrderDetails od " +
-	           "JOIN od.orderTable ot WHERE ot.user.id = :userId AND ot.status = 'pending'")
+	           "JOIN od.orderTable ot WHERE ot.user.id = :userId AND ot.status = 'Confirmed'")
 	    Integer getTotalCartCountByUserId(@Param("userId") Integer userId);
 }

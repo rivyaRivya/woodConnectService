@@ -85,4 +85,11 @@ public class orderTableController {
         return orderTableServices.getOrderId(id);
     }
 	  
+	@PutMapping("/update-status/{id}")
+	public ResponseEntity<Void> updateOrderStatus(@PathVariable Integer id, @RequestParam("status") String status) {
+    	
+		orderTableServices.updateStatus(id,status);
+        return ResponseEntity.noContent().build();
+    }
+	
 }

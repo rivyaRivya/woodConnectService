@@ -83,7 +83,7 @@ public class OrderTableServiceImpl implements OrderTableServices {
 			User driver = userRepository.findById(driver_id).get();
 			orderTable1.setDriver(driver);
 			LocalDate currentDate = LocalDate.now();
-	        
+	        orderTable1.setStatus("Ready for departure");
 	        // Formatting the current date to a string (e.g., "2025-03-09")
 	        String formattedDate = currentDate.format(DateTimeFormatter.ISO_DATE);
 	        
@@ -283,6 +283,16 @@ public Integer createOrderTable(OrderTable order, OrderDetails orderDetailsObj, 
     public Integer getOrderCount(Integer id) {
     	return orderDetailsRepository.getTotalCartCountByUserId(id);
     }
+
+	public void updateStatus(Integer id, String status) {
+		OrderTable orderTable =orderTableRepository
+		        .findById(id)
+		        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid user Id:" + id));
+				
+    orderTable.setStatus(status);
+	orderTableRepository.save(orderTable);
+		
+	}
 
 
 }
