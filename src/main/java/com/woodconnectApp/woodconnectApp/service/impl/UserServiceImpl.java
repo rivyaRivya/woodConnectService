@@ -50,12 +50,19 @@ public class UserServiceImpl implements UserServices {
 	}
 
 	@Override
-	public Integer login(UserDTO user) {
+	public UserDTO login(UserDTO user) {
 		User userData = userRepositiry.findByEmailAndPassword(user.getUsername(),user.getPassword());
-		if(userData == null)
-			return 0;
-		else
-			return userData.getId();
+		UserDTO userDetails = new UserDTO(null, null, null, null, null, null, null, null, null, null, null, null, null);
+		
+		if(userData == null) {
+			userDetails = null;
+			return userDetails;
+		}
+		else {
+			userDetails.setId(userData.getId());
+			userDetails.setType(userData.getType());;
+			return userDetails;
+		}
 	}
 
 	public List<UserDTO> getUser() {

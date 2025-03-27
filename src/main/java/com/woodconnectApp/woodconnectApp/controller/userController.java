@@ -60,9 +60,9 @@ public class userController {
 	
 	@PostMapping("/login")
 	@ResponseBody
-	public Integer login(@RequestBody UserDTO user) {
-		Integer id = userServices.login(user);
-		return	id;
+	public UserDTO login(@RequestBody UserDTO user) {
+		UserDTO userData = userServices.login(user);
+		return	userData;
 	}
 	 /**
      * get users as list
