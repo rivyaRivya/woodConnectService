@@ -154,7 +154,7 @@ public class UserServiceImpl implements UserServices {
 		if(dob != null)
 		userinfo.setDob(dob);
 		userinfo.setEmail(email);
-		userinfo.setFirstname(lastname);
+		userinfo.setFirstname(firstname);
 		userinfo.setLastname(lastname);
 		if(gender != null)
 		userinfo.setGender(gender);
