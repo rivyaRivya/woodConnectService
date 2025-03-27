@@ -9,6 +9,7 @@ public class TotalCount {
 	private Long customer;
 	private Long deliveredOrder;
 	private Long quotation;
+	private Long cart;
 	public Long getOrder() {
 		return order;
 	}
@@ -33,11 +34,12 @@ public class TotalCount {
 	public void setQuotation(Long quotation) {
 		this.quotation = quotation;
 	}
-	public void TotalCountDTO(Long order,Long customer,Long deliveredOrder,Long quotation) {
+	public void TotalCountDTO(Long order,Long customer,Long deliveredOrder,Long quotation,Long cart) {
 		
 		this.deliveredOrder = deliveredOrder;
 		this.customer = customer;
 		this.order = order;
 		this.quotation = quotation;
+		this.cart = cart;
 	}
 }

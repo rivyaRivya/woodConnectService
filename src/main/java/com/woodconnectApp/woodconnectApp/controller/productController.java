@@ -54,12 +54,13 @@ public class productController {
             @RequestParam("labourPrice") String labourPrice,
             @RequestParam("manufacturePrice") String manufacturePrice,
             @RequestParam("variant") String variant,
-            @RequestParam("isFeatured") boolean isFeatured) {
+            @RequestParam("isFeatured") boolean isFeatured,
+            @RequestParam("thickness") String thickness ) {
     // Convert image to byte array
        try {
     	   
         	   byte[] imageBytes = image.getBytes();
-        	   productServices.createProduct(productname,description,price,woodType_id,imageBytes,manufacture, stock,length,width,labourPrice,manufacturePrice,variant,isFeatured);
+        	   productServices.createProduct(productname,description,price,woodType_id,imageBytes,manufacture, stock,length,width,labourPrice,manufacturePrice,variant,isFeatured,thickness);
         	   return new ResponseEntity("Product added.", HttpStatus.ACCEPTED);
            
     	   } catch (IOException e) {
@@ -105,13 +106,14 @@ public class productController {
 	            @RequestParam("labourPrice") String labourPrice,
 	            @RequestParam("manufacturePrice") String manufacturePrice,
 	            @RequestParam("variant") String variant,
-	            @RequestParam("isFeatured") boolean isFeatured) {
+	            @RequestParam("isFeatured") boolean isFeatured,
+	            @RequestParam("thickness") String thickness) {
 		 byte[] imageBytes;
 		try {
 			if(image != null) {
 			imageBytes = image.getBytes();
 			}else {imageBytes = null;}
-			productServices.updateProduct(id, productname,description,price,woodType_id,imageBytes,manufacture, stock,length,width,labourPrice,manufacturePrice,variant,isFeatured);
+			productServices.updateProduct(id, productname,description,price,woodType_id,imageBytes,manufacture, stock,length,width,labourPrice,manufacturePrice,variant,isFeatured,thickness);
 
 		    
 		} catch (IOException e) {

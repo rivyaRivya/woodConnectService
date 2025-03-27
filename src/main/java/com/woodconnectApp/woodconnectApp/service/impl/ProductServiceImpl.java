@@ -55,7 +55,7 @@ public class ProductServiceImpl implements ProductServices {
 		List<ProductDTO> productDetails = new ArrayList<>();
 		for (Product product : products) //to get multiple items
 			{		    
-			ProductDTO productObject = new ProductDTO(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, false, null, null);
+			ProductDTO productObject = new ProductDTO(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, false, null, null, null);
 			if(product.getWoodType() != null) {
 			Optional<WoodType> wood = woodtypeRepository.findById(product.getWoodType().getId());
 		    
@@ -86,7 +86,7 @@ public class ProductServiceImpl implements ProductServices {
 		List<ProductDTO> productDetails = new ArrayList<>();
 		for (Product product : products) //to get multiple items
 			{		    
-			ProductDTO productObject = new ProductDTO(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, false, null, id);
+			ProductDTO productObject = new ProductDTO(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, false, null, id, null);
 			if(product.getWoodType() != null) {
 			Optional<WoodType> wood = woodtypeRepository.findById(product.getWoodType().getId());
 		    
@@ -155,7 +155,7 @@ public class ProductServiceImpl implements ProductServices {
 	                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid user Id:" + id));
 		
 		System.out.print(product+"poooooooooooooooooooooooooo");
-		ProductDTO productObject = new ProductDTO(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, false, null, id);
+		ProductDTO productObject = new ProductDTO(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, false, null, id, null);
 		 productObject.setId(product.getId());
 		 if(product.getWoodType() != null) {
 			Optional<WoodType> wood = woodtypeRepository.findById(product.getWoodType().getId());
@@ -189,7 +189,7 @@ public class ProductServiceImpl implements ProductServices {
 	}
 
 	public void createProduct(String productname, String description, String price, Integer woodType_id,
-			byte[] image, String manufacture,String stock,String length,String width,String labourPrice,String manufacturePrice, String variant,boolean isFeatured) {
+			byte[] image, String manufacture,String stock,String length,String width,String labourPrice,String manufacturePrice, String variant,boolean isFeatured,String thickness) {
 		// TODO Auto-generated method stub
 		Product productinfo = new Product();
 		System.out.print(productname+"OOOOOOOOOOOOOOOOOOO");
@@ -211,12 +211,13 @@ public class ProductServiceImpl implements ProductServices {
 		productinfo.setWidth(width);
 		productinfo.setManufacturePrice(manufacturePrice);
 		productinfo.setLabourPrice(labourPrice);
+		productinfo.setThickness(thickness);
 		productRepository.save(productinfo);
 		return;
 	}
 
 	public void updateProduct(Integer id, String productname, String description, String price, Integer woodType_id,
-			byte[] image, String manufacture, String stock,String length,String width,String labourPrice,String manufacturePrice,String variant,boolean isFeatured) {
+			byte[] image, String manufacture, String stock,String length,String width,String labourPrice,String manufacturePrice,String variant,boolean isFeatured,String thickness) {
 		Product productData =productRepository
 		        .findById(id)
 		        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid user Id:" + id));
@@ -229,6 +230,7 @@ public class ProductServiceImpl implements ProductServices {
 		productData.setManufacturePrice(manufacturePrice);
 		productData.setLabourPrice(labourPrice);
 		productData.setVariant(variant);
+		productData.setThickness(thickness);
 		if(isFeatured) {
 			productData.setIsFeatured(isFeatured);
 		}

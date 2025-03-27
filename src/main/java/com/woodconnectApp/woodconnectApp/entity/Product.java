@@ -35,6 +35,7 @@ public class Product {
 	private String description;
 	private String width;
 	private String length;
+	private String thickness;
 	private String labourPrice;
 	private String manufacturePrice;
 	private boolean isFeatured;
@@ -141,6 +142,10 @@ public class Product {
 	}
 	public void setManufacturePrice(String manufacturePrice) {
 		this.manufacturePrice = manufacturePrice;
+	}
+
+	public void setFeatured(boolean isFeatured) {
+		this.isFeatured = isFeatured;
 	}
 	
 //	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)

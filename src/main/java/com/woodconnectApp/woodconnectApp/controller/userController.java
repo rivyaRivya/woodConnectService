@@ -24,12 +24,20 @@ import com.woodconnectApp.woodconnectApp.dto.UserDTO;
 import com.woodconnectApp.woodconnectApp.dto.WoodTypeDTO;
 import com.woodconnectApp.woodconnectApp.entity.User;
 import com.woodconnectApp.woodconnectApp.entity.WoodType;
+import com.woodconnectApp.woodconnectApp.repository.OrderDetailsRepository;
+import com.woodconnectApp.woodconnectApp.service.impl.OrderTableServiceImpl;
 import com.woodconnectApp.woodconnectApp.service.impl.UserServiceImpl;
 
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000,http://localhost:8081", maxAge = 3600)
 public class userController {
+
+    private final OrderTableServiceImpl orderTableServiceImpl;
+
+    userController(OrderTableServiceImpl orderTableServiceImpl) {
+        this.orderTableServiceImpl = orderTableServiceImpl;
+    }
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -38,6 +46,10 @@ public class userController {
 	}
 	@Autowired
     private UserServiceImpl userServices;
+	
+
+	@Autowired
+    private OrderTableServiceImpl orderService;
 	
 	@PostMapping("/user")
     public String createBooking(
@@ -107,6 +119,12 @@ public class userController {
 	        count.setQuotation(totalQuotation);
 	        // Return both counts as a response
 	        return count;
+	    }
+	 
+	 @GetMapping("/counts/{id}")
+	 public long getCount(@PathVariable Integer id){
+	        long customerCart = orderService.getOrderCount(id);
+	        return customerCart;
 	    }
 	 
 	 @GetMapping("/getAvailableDriver")

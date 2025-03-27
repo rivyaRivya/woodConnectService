@@ -27,9 +27,10 @@ public class ProductDTO {
 	private boolean isFeatured;
 	private byte[] display;
 	private Integer quantity;
+	private String thickness;
 	public ProductDTO(Integer id,String productname,String price,
 			String manufacture,String stock,String image,Integer WoodType_id,String woodtypename,String fileType,String description,
-			String length,String width,String labourPrice,String manufacturePrice,String variant,String woodPrice, boolean isFeatured,byte[] display,Integer quantity) {
+			String length,String width,String labourPrice,String manufacturePrice,String variant,String woodPrice, boolean isFeatured,byte[] display,Integer quantity,String thickness) {
 		super();
 		this.id = id;
 		this.productname = productname;
@@ -50,6 +51,7 @@ public class ProductDTO {
 		this.isFeatured = isFeatured;
 		this.display = display;
 		this.quantity = quantity;
+		this.thickness = thickness;
 	}
 	public Integer getId() {
 		return id;
