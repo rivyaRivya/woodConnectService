@@ -8,14 +8,23 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.woodconnectApp.woodconnectApp.dto.ProductDTO;
 import com.woodconnectApp.woodconnectApp.dto.ReviewDTO;
+import com.woodconnectApp.woodconnectApp.repository.ReviewRepository;
 import com.woodconnectApp.woodconnectApp.service.impl.ReviewServiceImpl;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000,http://localhost:8081", maxAge = 3600)
 public class ReviewController {
+
+    private final ReviewRepository reviewRepository;
+
+    ReviewController(ReviewRepository reviewRepository) {
+        this.reviewRepository = reviewRepository;
+    }
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 	}
@@ -34,6 +43,9 @@ public class ReviewController {
 	public ResponseEntity<List<ReviewDTO>> getReview(){
 		return ResponseEntity.ok(reviewServices.getReview());
 	} 
-	
+	@GetMapping("/product-review")
+    public List<ReviewDTO> getproductdetails(@RequestParam Integer id) {
+        return reviewServices.getProductReview(id);
+    }
 	
 }

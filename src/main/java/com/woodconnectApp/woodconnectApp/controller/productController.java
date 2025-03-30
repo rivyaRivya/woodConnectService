@@ -154,4 +154,35 @@ public class productController {
 	    	productServices.deleteVaraintValue(id);
 	        return ResponseEntity.noContent().build();
 	    }
+	 
+	 @GetMapping("/productSearch")
+	    public ResponseEntity<List<ProductDTO>> prodctSearch(@RequestParam String keyword) {
+			 return ResponseEntity.ok(productServices.productSearch(keyword));
+	    }
+		
+	 @PostMapping("/quotation")
+	    public ResponseEntity createQuotation(@RequestParam("customerName") String customerName,
+	            @RequestParam("phone") String phone,
+	            @RequestParam("userId") Integer userId,
+	            @RequestParam("woodType_id") Integer woodType_id,
+	            @RequestParam("quantity") String quantity,
+	            @RequestParam(name="datas", required= false) MultipartFile image,
+	            @RequestParam(name="additionalNotes", required= false) String notes,
+	            @RequestParam(name="color", required= false) String color) {
+	    // Convert image to byte array
+	       try {
+	    	   byte[] imageBytes = null;
+	    	   if(image != null) {
+	    		 imageBytes = image.getBytes();
+	    	   }
+	    	   System.out.print(image+"hhhhhhhhhhhhhhhhhhhhhhhh");
+        	   productServices.createQuotation(customerName,phone,userId,woodType_id,imageBytes,quantity, notes,color);
+        	   return new ResponseEntity("Product added.", HttpStatus.ACCEPTED);
+	           
+	    	   } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	 }
 }

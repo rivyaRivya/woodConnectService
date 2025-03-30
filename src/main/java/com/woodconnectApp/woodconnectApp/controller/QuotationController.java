@@ -31,7 +31,7 @@ public class QuotationController {
 	@Autowired
     private QuotationServiceImpl quotationServices;
 	
-	@PostMapping("/quotation")
+	@PostMapping("/quotations")
     public ResponseEntity<String> createQuotation(
             @RequestParam("user_id") Integer user_id,
             @RequestParam(value = "image",required = false) MultipartFile image,

@@ -19,6 +19,7 @@ import com.woodconnectApp.woodconnectApp.entity.User;
 import com.woodconnectApp.woodconnectApp.entity.WoodType;
 import com.woodconnectApp.woodconnectApp.repository.QuotationRepository;
 import com.woodconnectApp.woodconnectApp.repository.UserRepository;
+import com.woodconnectApp.woodconnectApp.repository.WoodTypeRepository;
 import com.woodconnectApp.woodconnectApp.services.QuotationServices;
 
 import jakarta.transaction.Transactional;
@@ -28,6 +29,10 @@ public class QuotationServiceImpl implements QuotationServices {
 	private QuotationRepository quotationRepository;
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private WoodTypeRepository woodTypeRepository;
+	
 	@Override
 	public List getQuotation() {
 		List<Quotation> quotations = quotationRepository.findAll();
@@ -35,15 +40,27 @@ public class QuotationServiceImpl implements QuotationServices {
 		for (Quotation quotation : quotations) //to get multiple items
 			{
 			Optional<User> user = userRepository.findById(quotation.getUser().getId());
-			QuotationDTO quotationObject = new QuotationDTO(null, null, null, null, null, null, null, null, null);
+			QuotationDTO quotationObject = new QuotationDTO(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 			quotationObject.setId(quotation.getId());
 			quotationObject.setUser_id(user.get().getId());
-			quotationObject.setUsername(user.get().getFirstname()+ " " + user.get().getLastname());
-			quotationObject.setEmail(user.get().getEmail());
+			quotationObject.setUsername(quotation.getCustomerName());
+			quotationObject.setQuantity(quotation.getQuantity());
 			quotationObject.setMobile(user.get().getPhone());
 			quotationObject.setDescription(quotation.getDescription());
 			quotationObject.setStatus(quotation.getStatus());
-			quotationDetails.add(quotationObject);
+			quotationObject.setResponse(quotation.getResponse());
+			quotationObject.setWoodTypeId(null);
+			WoodType wood = woodTypeRepository.findById(quotation.getWoodTypeId())
+					.orElseThrow(() -> new RuntimeException("QuotationId not found"));
+			quotationObject.setWoodName(wood.getWoodname());
+			quotationObject.setWoodTypeId(wood.getId());
+			quotationObject.setWoodPrice(wood.getPrice());
+			quotationObject.setProductName(quotation.getProductName());
+			quotationObject.setDimensions(quotation.getDimension());
+			quotationObject.setTotalPrice(quotation.getTotalPrice());
+			quotationObject.setDiscount(quotation.getDiscount());
+			quotationObject.setManufacturingCost(quotation.getManufacturingCost());
+	quotationDetails.add(quotationObject);
 		}
 		return quotationDetails;
 		}
@@ -70,48 +87,33 @@ public class QuotationServiceImpl implements QuotationServices {
 		// TODO Auto-generated method stub
 		Optional<Quotation> quotation = quotationRepository.findById(id);
 			Optional<User> user = userRepository.findById(quotation.get().getUser().getId());
-			QuotationDTO quotationObject = new QuotationDTO(null, null, null, null, null, null, null, null, null);
+			QuotationDTO quotationObject = new QuotationDTO(null, null, null, null, null, null, null, null, null, null, id, null, null, null, null, null, null, null);
 			quotationObject.setId(quotation.get().getId());
 			quotationObject.setUser_id(user.get().getId());
-			quotationObject.setUsername(user.get().getFirstname()+ " " + user.get().getLastname());
-			quotationObject.setEmail(user.get().getEmail());
+			quotationObject.setUsername(quotation.get().getCustomerName());
+			
 			quotationObject.setMobile(user.get().getPhone());
 			quotationObject.setDescription(quotation.get().getDescription());
+			quotationObject.setQuantity(quotation.get().getQuantity());
 			quotationObject.setStatus(quotation.get().getStatus());
 			if(quotation.get().getImage()!=null) {
 		    String base64Image = Base64.getEncoder().encodeToString(quotation.get().getImage());
 	
 		    quotationObject.setImage(base64Image);
 	    }
+			WoodType wood = woodTypeRepository.findById(quotation.get().getWoodTypeId())
+					.orElseThrow(() -> new RuntimeException("QuotationId not found"));
+			quotationObject.setWoodName(wood.getWoodname());
+			quotationObject.setWoodTypeId(wood.getId());
 			quotationObject.setResponse(quotation.get().getResponse());
+			quotationObject.setWoodPrice(wood.getPrice());
+			quotationObject.setProductName(quotation.get().getProductName());
+			quotationObject.setDimensions(quotation.get().getDimension());
+			quotationObject.setTotalPrice(quotation.get().getTotalPrice());
+			quotationObject.setDiscount(quotation.get().getDiscount());
+			quotationObject.setManufacturingCost(quotation.get().getManufacturingCost());
+	
 			return quotationObject;
-//			quotationDetails.add(quotationObject);
-//		 if(data.getId() == id) {
-//				System.out.print(data+"eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
-//				QuotationDTO quotation = new QuotationDTO(null, null, null, null, null, null, null, null, null);
-//				quotation.setDescription(data.getDescription());
-//				quotation.setId(data.getId());
-//				if(data.getImage()!=null) {
-//				    String base64Image = Base64.getEncoder().encodeToString(data.getImage());
-//			
-//				    quotation.setImage(base64Image);
-//			    }
-//				quotation.setResponse(data.getResponse());
-//				quotation.setStatus(data.getStatus());
-//				if(data.getUser().getId() != null) {
-//					User user = userRepository
-//		                .findById(data.getUser().getId())
-//		                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid user Id:" + id));
-//					quotation.setUser_id(user.getId());
-//					System.out.print("ssssssssssssssssssssssssssssss"+user);
-//					quotation.setUsername(user.getFirstname() + " " + user.getLastname());
-//					quotation.setEmail(user.getEmail());
-//					quotation.setMobile(user.getPhone());
-//				}
-//			return quotation;
-//		 }
-//		}
-//	return null;
 
 	}
 
@@ -124,6 +126,13 @@ public class QuotationServiceImpl implements QuotationServices {
 		        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid user Id:" + id));
 		quotationData.setResponse(quotation.getResponse());
 		quotationData.setStatus(quotation.getStatus());
+		if ("Accepted".equals(quotation.getStatus())) {
+			quotationData.setProductName(quotation.getProductName());
+			quotationData.setDimension(quotation.getDimensions());
+			quotationData.setTotalPrice(quotation.getTotalPrice());
+			quotationData.setDiscount(quotation.getDiscount());
+			quotationData.setManufacturingCost(quotation.getManufacturingCost());
+		}
 		quotationRepository.save(quotationData);
 	}
 

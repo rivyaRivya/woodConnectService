@@ -14,6 +14,7 @@ public interface ProductServices {
 	ProductDTO getProductDetail(Integer id);
 	List getVariant();
 	List getProductByWood(Integer id);
+	List<ProductDTO> productSearch(String keyword);
 
 
 }

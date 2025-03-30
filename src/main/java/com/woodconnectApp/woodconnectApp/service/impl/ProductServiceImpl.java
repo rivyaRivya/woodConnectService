@@ -17,17 +17,22 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.woodconnectApp.woodconnectApp.dto.ProductDTO;
+import com.woodconnectApp.woodconnectApp.dto.QuotationDTO;
 import com.woodconnectApp.woodconnectApp.dto.VariantDTO;
 import com.woodconnectApp.woodconnectApp.dto.VariantResponseDTO;
 import com.woodconnectApp.woodconnectApp.dto.VariantValueDTO;
 import com.woodconnectApp.woodconnectApp.dto.WoodTypeDTO;
 import com.woodconnectApp.woodconnectApp.entity.OrderDetails;
 import com.woodconnectApp.woodconnectApp.entity.Product;
+import com.woodconnectApp.woodconnectApp.entity.Quotation;
+import com.woodconnectApp.woodconnectApp.entity.User;
 import com.woodconnectApp.woodconnectApp.entity.Variant;
 import com.woodconnectApp.woodconnectApp.entity.VariantValue;
 import com.woodconnectApp.woodconnectApp.entity.WoodType;
 import com.woodconnectApp.woodconnectApp.repository.OrderDetailsRepository;
 import com.woodconnectApp.woodconnectApp.repository.ProductRepository;
+import com.woodconnectApp.woodconnectApp.repository.QuotationRepository;
+import com.woodconnectApp.woodconnectApp.repository.UserRepository;
 import com.woodconnectApp.woodconnectApp.repository.VariantRepository;
 import com.woodconnectApp.woodconnectApp.repository.VariantValueRepository;
 import com.woodconnectApp.woodconnectApp.repository.WoodTypeRepository;
@@ -48,6 +53,11 @@ public class ProductServiceImpl implements ProductServices {
 
 	@Autowired
 	private VariantValueRepository variantValueRepository;
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private QuotationRepository quotationRepository;
 	
 	@Override
 	public List getProduct() {
@@ -329,4 +339,42 @@ public class ProductServiceImpl implements ProductServices {
 		}
 		response.setValues(valueDTOs);
 		return response;	}
+	
+	@Override
+	public List<ProductDTO> productSearch(String keyword) {
+		List<Product> products = productRepository.searchProducts(keyword);
+		List<ProductDTO> productDetails = new ArrayList<>();
+		for (Product product : products) //to get multiple items
+			{		    
+			ProductDTO productObject = new ProductDTO(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, false, null, null, null);
+			productObject.setId(product.getId());
+		    productObject.setProductname(product.getProductname());
+		    productDetails.add(productObject);
+		}
+		return productDetails;
+		}
+
+	public void createQuotation(String customerName, String phone, Integer userId, Integer woodType_id,
+			byte[] imageBytes, String quantity, String notes, String color) {
+		Quotation quotation = new Quotation();
+		if(woodType_id != null) {
+			WoodType woodtype = woodtypeRepository.findById(woodType_id)
+					.orElseThrow(() -> new RuntimeException("WoodTypeId not found"));
+			quotation.setWoodTypeId(woodType_id);
+			}
+		quotation.setColor(color);
+		quotation.setDescription(notes);
+		quotation.setImage(imageBytes);
+		quotation.setCustomerName(customerName);
+		quotation.setQuantity(quantity);
+		quotation.setStatus("Requested");
+		quotation.setUser(null);
+		if(woodType_id != null) {
+			User user = userRepository.findById(userId)
+					.orElseThrow(() -> new RuntimeException("WoodTypeId not found"));
+			quotation.setUser(user);
+		}
+		quotationRepository.save(quotation);
+	}
+
 }

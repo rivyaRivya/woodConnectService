@@ -12,21 +12,40 @@ public class QuotationDTO {
 	private String image;
 	private Integer user_id;
 	private String response;
-	private String username;
+	private String customerName;
 	private String mobile;
-	private String email;
+	private String quantity;
+	private String color;
+	private Integer woodTypeId;
+	private String woodName;
+	private String productName;
+	private String dimensions;
+	private String discount;
+	private String totalPrice;
+	private String manufacturingCost;
+	private String woodPrice;
 	public QuotationDTO(Integer id,String description,String status,String image,
-			Integer user_id,String username,String response,String mobile,String email){
+			Integer user_id,String username,String response,String mobile,String quantity,String color,Integer woodTypeId,String woodName,
+			String productName,String dimension,String discount,String totalPrice,String manufacturingCost,String woodPrice){
 		super();
 		this.id = id;
 		this.description = description;
 		this.status = status;
 		this.image = image;
 		this.user_id = user_id;
-		this.username = username;
+		this.customerName = username;
 		this.response = response;
 		this.mobile = mobile;
-		this.email = email;
+		this.quantity = quantity;
+		this.color = color;
+		this.woodTypeId = woodTypeId;
+		this.woodName = woodName;
+		this.productName = productName;
+		this.dimensions = dimension;
+		this.discount = discount;
+		this.totalPrice = totalPrice;
+		this.manufacturingCost = manufacturingCost;
+		this.woodPrice = woodPrice;
 	}
 	public Integer getId() {
 		return id;
@@ -65,22 +84,16 @@ public class QuotationDTO {
 		this.response = response;
 	}
 	public String getUsername() {
-		return username;
+		return customerName;
 	}
 	public void setUsername(String username) {
-		this.username = username;
+		this.customerName = username;
 	}
 	public String getMobile() {
 		return mobile;
 	}
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 }

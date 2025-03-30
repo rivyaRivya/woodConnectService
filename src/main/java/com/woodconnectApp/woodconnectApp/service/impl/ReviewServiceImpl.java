@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.woodconnectApp.woodconnectApp.dto.ProductDTO;
 import com.woodconnectApp.woodconnectApp.dto.ReviewDTO;
 import com.woodconnectApp.woodconnectApp.entity.Product;
 import com.woodconnectApp.woodconnectApp.entity.Review;
@@ -43,6 +44,28 @@ public class ReviewServiceImpl implements ReviewServices {
 	@Override
 	public List getReview() {
 		List<Review> reviews = reviewRepository.findAll();
+		List<ReviewDTO> reviewDetails = new ArrayList<>();
+		for (Review review : reviews) //to get multiple items
+			{
+			Optional<User> user = userRepository.findById(review.getUser().getId());
+			ReviewDTO reviewObject = new ReviewDTO(null, null, null, null,null, null, null);
+		    reviewObject.setId(review.getId());
+		    reviewObject.setId(user.get().getId());
+		    reviewObject.setReview(review.getReview());
+		    reviewObject.setRating(review.getRating());
+		    if(review.getProduct()!=null) {
+		    	Optional<Product> product = productRepository.findById(review.getProduct().getId());
+			     reviewObject.setProduct_id(product.get().getId());
+		    	reviewObject.setProductname(product.get().getProductname());
+		    }
+		    reviewObject.setUsername(user.get().getFirstname()+" "+user.get().getLastname());
+		   reviewDetails.add(reviewObject);
+		}
+		return reviewDetails;
+		}
+
+	public List<ReviewDTO> getProductReview(Integer id) {
+		List<Review> reviews = reviewRepository.findByProductId(id);
 		List<ReviewDTO> reviewDetails = new ArrayList<>();
 		for (Review review : reviews) //to get multiple items
 			{

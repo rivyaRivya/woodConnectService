@@ -20,6 +20,16 @@ public class Quotation {
     private Integer id;
 	private String description;
 	private String status;
+	private String quantity;
+	private String color;
+	private Integer woodTypeId;
+	private String customerName;
+	
+	private String productName;
+	private String dimension;
+	private String discount;
+	private String totalPrice;
+	private String manufacturingCost;
 	public Integer getId() {
 		return id;
 	}
