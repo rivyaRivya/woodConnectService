@@ -169,6 +169,7 @@ public class productController {
 	            @RequestParam(name="datas", required= false) MultipartFile image,
 	            @RequestParam(name="additionalNotes", required= false) String notes,
 	            @RequestParam(name="color", required= false) String color,
+	            @RequestParam(name="dimension", required= false) String dimension,
 	            @RequestParam(name="productName", required= false) String productName) {
 	    // Convert image to byte array
 	       try {
@@ -177,7 +178,7 @@ public class productController {
 	    		 imageBytes = image.getBytes();
 	    	   }
 	    	   System.out.print(image+"hhhhhhhhhhhhhhhhhhhhhhhh");
-        	   productServices.createQuotation(customerName,phone,userId,woodType_id,imageBytes,quantity, notes,color,productName);
+        	   productServices.createQuotation(customerName,phone,userId,woodType_id,imageBytes,quantity, notes,color,productName,dimension);
         	   return new ResponseEntity("Product added.", HttpStatus.ACCEPTED);
 	           
 	    	   } catch (IOException e) {
@@ -192,6 +193,7 @@ public class productController {
 	            @RequestParam("userId") Integer userId,
 	            @RequestParam("woodType_id") Integer woodType_id,
 	            @RequestParam("quantity") String quantity,
+	            @RequestParam(name="dimension", required= false) String dimension,
 	            @RequestParam(name="datas", required= false) MultipartFile image,
 	            @RequestParam(name="additionalNotes", required= false) String notes,
 	            @RequestParam(name="color", required= false) String color,
@@ -203,7 +205,7 @@ public class productController {
 	    		 imageBytes = image.getBytes();
 	    	   }
 	    	   System.out.print(image+"hhhhhhhhhhhhhhhhhhhhhhhh");
-     	   productServices.updateQuotation(id,customerName,phone,userId,woodType_id,imageBytes,quantity, notes,color,productName);
+     	   productServices.updateQuotation(id,customerName,phone,userId,woodType_id,imageBytes,quantity, notes,color,productName,dimension);
      	   return new ResponseEntity("Product added.", HttpStatus.ACCEPTED);
 	           
 	    	   } catch (IOException e) {

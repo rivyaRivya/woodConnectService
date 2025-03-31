@@ -355,7 +355,7 @@ public class ProductServiceImpl implements ProductServices {
 		}
 
 	public void createQuotation(String customerName, String phone, Integer userId, Integer woodType_id,
-			byte[] imageBytes, String quantity, String notes, String color,String productName) {
+			byte[] imageBytes, String quantity, String notes, String color,String productName,String dimension) {
 		Quotation quotation = new Quotation();
 		if(woodType_id != null) {
 			WoodType woodtype = woodtypeRepository.findById(woodType_id)
@@ -370,6 +370,7 @@ public class ProductServiceImpl implements ProductServices {
 		quotation.setQuantity(quantity);
 		quotation.setStatus("Requested");
 		quotation.setUser(null);
+		quotation.setDimension(dimension);
 		if(woodType_id != null) {
 			User user = userRepository.findById(userId)
 					.orElseThrow(() -> new RuntimeException("WoodTypeId not found"));
@@ -379,7 +380,7 @@ public class ProductServiceImpl implements ProductServices {
 	}
 
 	public void updateQuotation(Integer id,String customerName, String phone, Integer userId, Integer woodType_id,
-			byte[] imageBytes, String quantity, String notes, String color, String productName) {
+			byte[] imageBytes, String quantity, String notes, String color, String productName,String dimension) {
 		
 		Quotation quotation =quotationRepository
 		        .findById(id)
@@ -396,6 +397,7 @@ public class ProductServiceImpl implements ProductServices {
 		quotation.setCustomerName(customerName);
 		quotation.setProductName(productName);
 		quotation.setQuantity(quantity);
+		quotation.setDimension(dimension);
 		quotation.setStatus("Requested");
 		quotation.setUser(null);
 		if(woodType_id != null) {
