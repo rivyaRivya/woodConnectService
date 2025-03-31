@@ -168,7 +168,8 @@ public class productController {
 	            @RequestParam("quantity") String quantity,
 	            @RequestParam(name="datas", required= false) MultipartFile image,
 	            @RequestParam(name="additionalNotes", required= false) String notes,
-	            @RequestParam(name="color", required= false) String color) {
+	            @RequestParam(name="color", required= false) String color,
+	            @RequestParam(name="productName", required= false) String productName) {
 	    // Convert image to byte array
 	       try {
 	    	   byte[] imageBytes = null;
@@ -176,7 +177,7 @@ public class productController {
 	    		 imageBytes = image.getBytes();
 	    	   }
 	    	   System.out.print(image+"hhhhhhhhhhhhhhhhhhhhhhhh");
-        	   productServices.createQuotation(customerName,phone,userId,woodType_id,imageBytes,quantity, notes,color);
+        	   productServices.createQuotation(customerName,phone,userId,woodType_id,imageBytes,quantity, notes,color,productName);
         	   return new ResponseEntity("Product added.", HttpStatus.ACCEPTED);
 	           
 	    	   } catch (IOException e) {
