@@ -186,4 +186,30 @@ public class productController {
 		}
 		return null;
 	 }
+	 @PostMapping("/update-quotations/{id}")
+	    public ResponseEntity updateQuotation(@PathVariable Integer id,@RequestParam("customerName") String customerName,
+	            @RequestParam("phone") String phone,
+	            @RequestParam("userId") Integer userId,
+	            @RequestParam("woodType_id") Integer woodType_id,
+	            @RequestParam("quantity") String quantity,
+	            @RequestParam(name="datas", required= false) MultipartFile image,
+	            @RequestParam(name="additionalNotes", required= false) String notes,
+	            @RequestParam(name="color", required= false) String color,
+	            @RequestParam(name="productName", required= false) String productName) {
+	    // Convert image to byte array
+	       try {
+	    	   byte[] imageBytes = null;
+	    	   if(image != null) {
+	    		 imageBytes = image.getBytes();
+	    	   }
+	    	   System.out.print(image+"hhhhhhhhhhhhhhhhhhhhhhhh");
+     	   productServices.updateQuotation(id,customerName,phone,userId,woodType_id,imageBytes,quantity, notes,color,productName);
+     	   return new ResponseEntity("Product added.", HttpStatus.ACCEPTED);
+	           
+	    	   } catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	 }
 }

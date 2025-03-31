@@ -378,4 +378,32 @@ public class ProductServiceImpl implements ProductServices {
 		quotationRepository.save(quotation);
 	}
 
+	public void updateQuotation(Integer id,String customerName, String phone, Integer userId, Integer woodType_id,
+			byte[] imageBytes, String quantity, String notes, String color, String productName) {
+		
+		Quotation quotation =quotationRepository
+		        .findById(id)
+		        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid user Id:" + id));
+				
+		if(woodType_id != null) {
+			WoodType woodtype = woodtypeRepository.findById(woodType_id)
+					.orElseThrow(() -> new RuntimeException("WoodTypeId not found"));
+			quotation.setWoodTypeId(woodType_id);
+			}
+		quotation.setColor(color);
+		quotation.setDescription(notes);
+		quotation.setImage(imageBytes);
+		quotation.setCustomerName(customerName);
+		quotation.setProductName(productName);
+		quotation.setQuantity(quantity);
+		quotation.setStatus("Requested");
+		quotation.setUser(null);
+		if(woodType_id != null) {
+			User user = userRepository.findById(userId)
+					.orElseThrow(() -> new RuntimeException("WoodTypeId not found"));
+			quotation.setUser(user);
+		}
+		quotationRepository.save(quotation);
+	}
+
 }
