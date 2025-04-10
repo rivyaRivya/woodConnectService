@@ -1,6 +1,7 @@
 package com.woodconnectApp.woodconnectApp.controller;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,12 +16,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.stripe.model.PaymentIntent;
+import com.woodconnectApp.woodconnectApp.dto.DeliveredDTO;
 import com.woodconnectApp.woodconnectApp.dto.OrderDetailsDTO;
 import com.woodconnectApp.woodconnectApp.dto.OrderRequest;
 import com.woodconnectApp.woodconnectApp.dto.OrderTableDTO;
 import com.woodconnectApp.woodconnectApp.entity.OrderDetails;
 import com.woodconnectApp.woodconnectApp.entity.OrderTable;
 import com.woodconnectApp.woodconnectApp.entity.Product;
+import com.woodconnectApp.woodconnectApp.entity.Transaction;
 import com.woodconnectApp.woodconnectApp.entity.User;
 import com.woodconnectApp.woodconnectApp.repository.ProductRepository;
 import com.woodconnectApp.woodconnectApp.repository.UserRepository;
@@ -92,4 +96,29 @@ public class orderTableController {
         return ResponseEntity.noContent().build();
     }
 	
+	@PostMapping("/create-transaction")
+    public Transaction createTransaction(@RequestParam("amount") Double amount) {
+       System.out.print(amount+"PPPPPPPPPPPPPPPPPPPPPPPPPPpp");
+       return orderTableServices.createTransaction(amount);
+    }
+	
+	@PostMapping("/create-payment-intent")
+    public ResponseEntity<?> createPaymentIntent(@RequestParam int amount) {
+        try {
+        	System.out.print("PPPPPP:"+amount);
+            PaymentIntent paymentIntent = orderTableServices.createPaymentIntent(amount);
+
+        	System.out.print("PPPPPP:"+paymentIntent);
+            return ResponseEntity.ok(paymentIntent);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error creating payment intent: " + e.getMessage());
+        }
+    }
+	
+	@GetMapping("/get-delivered-orders")
+	public ResponseEntity<List<DeliveredDTO>> getDeliveredOrder(){
+//		LocalDate localDate = LocalDate.parse(startDate);
+//		LocalDate localDate1 = LocalDate.parse(endDate);
+		return ResponseEntity.ok(orderTableServices.getOrderDelivered());
+	}
 }

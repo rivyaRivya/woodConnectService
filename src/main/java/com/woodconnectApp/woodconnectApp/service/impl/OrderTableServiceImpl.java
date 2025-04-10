@@ -4,15 +4,24 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.jaxb.SpringDataJaxb.OrderDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.razorpay.Order;
+import com.razorpay.RazorpayClient;
+import com.razorpay.RazorpayException;
+import com.stripe.model.PaymentIntent;
+import com.stripe.param.PaymentIntentCreateParams;
+import com.woodconnectApp.woodconnectApp.dto.DeliveredDTO;
 import com.woodconnectApp.woodconnectApp.dto.OrderDetailsDTO;
 import com.woodconnectApp.woodconnectApp.dto.OrderRequest;
 import com.woodconnectApp.woodconnectApp.dto.OrderTableDTO;
@@ -20,6 +29,7 @@ import com.woodconnectApp.woodconnectApp.dto.ProductDTO;
 import com.woodconnectApp.woodconnectApp.entity.OrderDetails;
 import com.woodconnectApp.woodconnectApp.entity.OrderTable;
 import com.woodconnectApp.woodconnectApp.entity.Product;
+import com.woodconnectApp.woodconnectApp.entity.Transaction;
 import com.woodconnectApp.woodconnectApp.entity.User;
 import com.woodconnectApp.woodconnectApp.entity.WoodType;
 import com.woodconnectApp.woodconnectApp.repository.OrderDetailsRepository;
@@ -41,7 +51,9 @@ public class OrderTableServiceImpl implements OrderTableServices {
 	private ProductRepository productRepository;
 	@Autowired
     private WoodTypeRepository woodTypeRepository;
-	
+	private static final String key = "rzp_test_7n3m2Cdf0J585n";
+	private static final String secretKey ="M4zX7EMEEYZBGizmWg4FgH2R";
+	private static final String currency ="INR";
 //	@Override
 //	public void createOrderTable(OrderTableDTO orderTableData) {
 //		User user = userRepository.findById(orderTableData.getId())
@@ -305,6 +317,81 @@ public Integer createOrderTable(OrderTable order, OrderDetails orderDetailsObj, 
 	orderTableRepository.save(orderTable);
 		
 	}
+	
+	@Override
+	public Transaction createTransaction(Double amount) {
+		try {
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("amount", amount *100);
+			jsonObject.put("currency", currency);
+			RazorpayClient razorpayClient = new RazorpayClient(key,secretKey);
+			Order order = razorpayClient.Orders.create(jsonObject);
+			Transaction transaction = prepareTransaction(order);
+			System.out.print(transaction+"iiiiiiiiiiiiiiiiiiiiii");
+			return transaction;
+		} catch (RazorpayException e) {
+			System.out.print(e.getMessage());
+		}
+		return null;
+		
+	}
 
+	public Transaction prepareTransaction(Order order) {
+		String orderId = order.get("id");
+		String currency= order.get("currency");
+		Integer amount = order.get("amount");
+		System.out.print(amount+currency+orderId+"OOOOOOOOOO");
+		Transaction transaction = new Transaction(orderId,currency,amount);
+		return transaction;
+	}
+	
+	public PaymentIntent createPaymentIntent(int amount) throws Exception {
+        PaymentIntentCreateParams params =
+                PaymentIntentCreateParams.builder()
+                        .setAmount((long) amount)  // Amount in cents
+                        .setCurrency("inr")
+                        .build();
+ System.out.print(params);
+        return PaymentIntent.create(params);
+    }
+	
+	
+	public List<DeliveredDTO> getOrderDelivered() {
+		List<OrderTable> orders = orderTableRepository.findOrdersWithDeliveredStatusAndDateRange();
+		List<DeliveredDTO> orderList = new ArrayList<>();
+		Map<Integer, DeliveredDTO> productSummaryMap = new HashMap<>();
+
+		for (OrderTable order : orders) //to get multiple items
+			{	
+				List<OrderDetails> orderDetailsData = orderDetailsRepository
+		                .findByorderTable_id(order.getId());
+				
+				for (OrderDetails orderDetail : orderDetailsData) //to get multiple items
+				{	
+					int quantity = orderDetail.getQuantity();
+
+		    	 	Optional<Product> product = productRepository.findById(orderDetail.getProduct().getId());
+		    	 	DeliveredDTO orderObject = new DeliveredDTO(null, null, null, null);
+		    	 	Integer productId = product.get().getId();
+	    	        String productName = product.get().getProductname(); 
+
+					Double price = Double.parseDouble(product.get().getPrice());
+	    	         DeliveredDTO existing = productSummaryMap.get(productId);
+    	            if (existing == null) {
+    	                DeliveredDTO dto = new DeliveredDTO(null, null, null, null);
+    	                dto.setProductName(productName);
+    	                dto.setQuantity(quantity);
+    	                dto.setAmount(price * quantity);
+    	                dto.setProductId(productId);
+    	                productSummaryMap.put(productId, dto);
+    	            } else {
+    	                existing.setQuantity(existing.getQuantity() + quantity);
+    	                existing.setAmount(existing.getAmount() + (price * quantity));
+    	            }		    	 	orderList.add(orderObject);
+				}
+			   
+			}
+		return new ArrayList<>(productSummaryMap.values());
+	}
 
 }
